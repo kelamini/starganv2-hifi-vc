@@ -1,0 +1,36 @@
+log_dir: "outputs/training/asr"
+save_freq: 10
+device: "cuda"
+epochs: 200
+batch_size: 6
+pretrained_model: ""
+
+train_data: "datasets/train_list.txt"
+val_data: "datasets/val_list.txt"
+
+preprocess_params:
+  sr: 44100
+  segment_size: 49152
+  spect_params:
+    n_mels: 80
+    n_fft: 1024
+    win_length: 1024
+    hop_length: 256
+    f_min: 50
+    f_max: 16000
+  mel_params:
+    n_mels: 80
+    n_fft: 1024
+    win_length: 1024
+    hop_length: 256
+    f_min: 50
+    f_max: 16000
+
+model_params:
+   input_dim: 80
+   hidden_dim: 256
+   n_token: 80
+   token_embedding_dim: 256
+
+optimizer_params:
+  lr: 0.0005

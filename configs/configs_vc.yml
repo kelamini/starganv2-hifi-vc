@@ -1,0 +1,77 @@
+log_dir: "outputs/training/vc"
+save_freq: 2
+device: "cuda"
+epochs: 1500
+batch_size: 6
+pretrained_model: ""
+load_only_params: false
+fp16_run: true
+
+train_data: "datasets/train_list.txt"
+val_data: "datasets/val_list.txt"
+
+asr_params:
+  model_path: "ckpts/asr/epoch_00100.pth"
+  model_params:
+    input_dim: 80
+    hidden_dim: 256
+    n_token: 80
+    token_embedding_dim: 256
+
+f0_params:
+  model_path: "ckpts/jdc/bst.t7"
+  model_params:
+    num_class: 1 
+    seq_len: 192
+    leaky_relu_slope: 0.01
+
+preprocess_params:
+  sr: 44100
+  segment_size: 49152
+  spect_params:
+    n_mels: 80
+    n_fft: 1024
+    win_length: 1024
+    hop_length: 256
+    f_min: 50
+    f_max: 16000
+  mel_params:
+    n_mels: 80
+    n_fft: 1024
+    win_length: 1024
+    hop_length: 256
+    f_min: 50
+    f_max: 16000
+
+model_params:
+  dim_in: 64
+  style_dim: 64
+  latent_dim: 16
+  num_domains: 20
+  max_conv_dim: 512
+  n_repeat: 4
+  w_hpf: 0
+  F0_channel: 256
+
+loss_params:
+  g_loss:
+    lambda_sty: 1.
+    lambda_cyc: 5.
+    lambda_ds: 1.
+    lambda_norm: 1.
+    lambda_asr: 10.
+    lambda_f0: 5.
+    lambda_f0_sty: 0.1
+    lambda_adv: 2.
+    lambda_adv_cls: 0.5
+    norm_bias: 0.5
+  d_loss:
+    lambda_reg: 1.
+    lambda_adv_cls: 0.1
+    lambda_con_reg: 10.
+  
+  adv_cls_epoch: 50
+  con_reg_epoch: 30
+
+optimizer_params:
+  lr: 0.0001
