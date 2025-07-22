@@ -154,7 +154,7 @@ def inference(args):
 
         gen_mel = gen_mel.transpose(-1, -2).squeeze().to(device)
         audio = hifigan_inference(hifigan, gen_mel)
-    
+    os.makedirs(args.output_dir, exist_ok=True)
     output_path = os.path.join(args.output_dir, Path(args.source_path).stem+"_vc_generated.wav")
     write(output_path, sr, audio)
     print(f"保存到路径：{args.output_path}")
@@ -162,9 +162,9 @@ def inference(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="")
-    parser.add_argument('--f0_model_path', type=str, default='ckpts/jdc/bst.t7', help='')
-    parser.add_argument('--starganv2_vc_model_path', type=str, default='', help='')
-    parser.add_argument('--hifigan_model_path', type=str, default='ckpts/hifigan/g_00082000', help='')
+    parser.add_argument('--starganv2_vc_model', type=str, default='', help='')
+    parser.add_argument('--f0_model', type=str, default='ckpts/jdc/bst.t7', help='')
+    parser.add_argument('--hifigan_model', type=str, default='ckpts/hifigan/g_00082000', help='')
     parser.add_argument('--source_path', type=str, default='', help='')
     parser.add_argument('--ref_path', type=str, default='', help='')
     parser.add_argument('--speaker', type=int, default=0, help='')
