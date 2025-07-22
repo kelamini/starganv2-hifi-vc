@@ -2,7 +2,7 @@ log_dir: "outputs/training/f0"
 save_freq: 10
 device: "cuda"
 epochs: 100
-batch_size: 6
+batch_size: 8
 pretrained_model: ""
 train_data: "datasets/train_list.txt"
 val_data: "datasets/val_list.txt"

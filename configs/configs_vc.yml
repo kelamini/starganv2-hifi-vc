@@ -1,8 +1,8 @@
 log_dir: "outputs/training/vc"
-save_freq: 2
+save_freq: 60
 device: "cuda"
 epochs: 1500
-batch_size: 6
+batch_size: 4
 pretrained_model: ""
 load_only_params: false
 fp16_run: true
@@ -47,7 +47,7 @@ model_params:
   dim_in: 64
   style_dim: 64
   latent_dim: 16
-  num_domains: 20
+  num_domains: 174
   max_conv_dim: 512
   n_repeat: 4
   w_hpf: 0

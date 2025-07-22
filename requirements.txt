@@ -5,6 +5,7 @@ tensorboard
 soundfile
 librosa
 pydub
+
 g2p_en
 pyworld
 

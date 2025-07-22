@@ -31,7 +31,8 @@ class Trainer(object):
                  train_dataloader=None,
                  val_dataloader=None,
                  initial_steps=0,
-                 initial_epochs=0):
+                 initial_epochs=0,
+                 writer=None):
 
         self.steps = initial_steps
         self.epochs = initial_epochs
@@ -47,6 +48,7 @@ class Trainer(object):
         self.finish_train = False
         self.logger = logger
         self.fp16_run = False
+        self.writer = writer
 
     def save_checkpoint(self, checkpoint_path):
         """Save checkpoint.
@@ -156,6 +158,7 @@ class Trainer(object):
             losses = self.run(batch)
             for key, value in losses.items():
                 train_losses["train/%s" % key].append(value)
+                self.writer.add_scalar(f"train/{key}", value, self.epochs*train_steps_per_epoch)
 
         train_losses = {key: np.mean(value) for key, value in train_losses.items()}
         train_losses['train/learning_rate'] = self._get_lr()
@@ -180,6 +183,9 @@ class Trainer(object):
             eval_losses["eval/loss"].append(loss.item())
             eval_losses["eval/f0"].append(loss_f0.item())
             eval_losses["eval/sil"].append(loss_sil.item())
+            self.writer.add_scalar(f"eval/loss", loss.item(), self.epochs*eval_steps_per_epoch)
+            self.writer.add_scalar(f"eval/f0", loss_f0.item(), self.epochs*eval_steps_per_epoch)
+            self.writer.add_scalar(f"eval/sil", loss_sil.item(), self.epochs*eval_steps_per_epoch)
             
         eval_losses = {key: np.mean(value) for key, value in eval_losses.items()}
         eval_losses.update(eval_images)

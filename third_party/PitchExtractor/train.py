@@ -97,7 +97,8 @@ def main(config):
                         train_dataloader=train_dataloader,
                         val_dataloader=val_dataloader,
                         loss_config=loss_config,
-                        logger=logger)
+                        logger=logger,
+                        writer=writer)
 
     if config.get('pretrained_model', '') != '':
         trainer.load_checkpoint(config['pretrained_model'],
@@ -120,9 +121,9 @@ def main(config):
             for key, value in results.items():
                 if isinstance(value, float):
                     logger.info('%-15s: %.4f' % (key, value))
-                    writer.add_scalar(key, value, epoch)
-                else:
-                    writer.add_figure(key, (value), epoch)
+                    # writer.add_scalar(key, value, epoch)
+                # else:
+                #     writer.add_figure(key, (value), epoch)
             if (epoch % save_freq) == 0:
                 trainer.save_checkpoint(osp.join(log_dir, 'epoch_%05d.pth' % epoch))
 

@@ -32,7 +32,7 @@ torch.backends.cudnn.benchmark = True #
 def main(config):
 
     log_dir = config['log_dir']
-    writer = SummaryWriter(log_dir + "/tensorboard")
+    writer = SummaryWriter(log_dir + "/logs")
 
     # write logs
     file_handler = logging.FileHandler(osp.join(log_dir, 'train.log'))
@@ -100,7 +100,8 @@ def main(config):
                             train_dataloader=train_dataloader,
                             val_dataloader=val_dataloader,
                             logger=logger,
-                            fp16_run=fp16_run)
+                            fp16_run=fp16_run,
+                            writer=writer)
 
     if config.get('pretrained_model', '') != '':
         trainer.load_checkpoint(config['pretrained_model'],
@@ -116,10 +117,10 @@ def main(config):
         for key, value in results.items():
             if isinstance(value, float):
                 logger.info('%-15s: %.4f' % (key, value))
-                writer.add_scalar(key, value, epoch)
-            else:
-                for v in value:
-                    writer.add_figure('eval_spec', v, epoch)
+                # writer.add_scalar(key, value, epoch)
+            # else:
+            #     for k, v in value[0].items():
+                    # writer.add_figure(f'eval_spec/{k}', v, epoch*len(val_dataloader))
         if (epoch % save_freq) == 0:
             trainer.save_checkpoint(osp.join(log_dir, 'epoch_%05d.pth' % epoch))
 
