@@ -5,6 +5,9 @@ from models import build_model
 from trainer import Trainer
 from configs import config
 
+import warnings
+warnings.simplefilter('ignore')
+
 import os.path as osp
 import torch
 from torch.utils.tensorboard import SummaryWriter

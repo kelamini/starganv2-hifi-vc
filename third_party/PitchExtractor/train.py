@@ -6,6 +6,9 @@ from configs import config
 
 import os.path as osp
 
+import warnings
+warnings.simplefilter('ignore')
+
 import torch
 import torch.nn as nn
 from torch.utils.tensorboard import SummaryWriter

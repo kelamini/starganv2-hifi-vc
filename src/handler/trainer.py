@@ -224,10 +224,8 @@ class Trainer(object):
 
             for key in d_losses_latent:
                 train_losses["train/d_loss/%s" % key].append(d_losses_latent[key])
-                self.writer.add_scalar(f"train/d_loss/{key}", d_losses_latent[key], self.epochs*train_steps_per_epoch)
             for key in g_losses_latent:
                 train_losses["train/g_loss/%s" % key].append(g_losses_latent[key])
-                self.writer.add_scalar(f"train/g_loss/{key}", g_losses_latent[key], self.epochs*train_steps_per_epoch)
 
         train_losses = {key: np.mean(value) for key, value in train_losses.items()}
         return train_losses
@@ -259,12 +257,10 @@ class Trainer(object):
 
             for key in d_losses_latent:
                 eval_losses["eval/d_loss/%s" % key].append(d_losses_latent[key])
-                self.writer.add_scalar(f"eval/d_loss/{key}", d_losses_latent[key], self.epochs*eval_steps_per_epoch)
             for key in g_losses_latent:
                 eval_losses["eval/g_loss/%s" % key].append(g_losses_latent[key])
-                self.writer.add_scalar(f"eval/g_loss/{key}", g_losses_latent[key], self.epochs*eval_steps_per_epoch)
 
-            if eval_steps_per_epoch % (len(self.val_dataloader)//100) == 0:
+            if eval_steps_per_epoch % (len(self.val_dataloader)) == 0:
                 # generate x_fake
                 s_trg = self.model_ema.style_encoder(x_ref, y_trg)
                 F0 = self.model.f0_model.get_feature_GAN(x_real)
@@ -278,8 +274,6 @@ class Trainer(object):
                     {"x_real": plot_spectrogram(x_real[0, 0].cpu().numpy()),
                     "x_fake": plot_spectrogram(x_fake[0, 0].cpu().numpy()),
                     "x_recon": plot_spectrogram(x_recon[0, 0].cpu().numpy())})
-                for key, image in eval_images['eval/image'][0].items():
-                    self.writer.add_figure(f'eval/image/{key}', image, self.epochs*eval_steps_per_epoch)
 
         eval_losses = {key: np.mean(value) for key, value in eval_losses.items()}
         eval_losses.update(eval_images)

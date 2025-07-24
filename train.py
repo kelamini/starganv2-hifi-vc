@@ -117,10 +117,10 @@ def main(config):
         for key, value in results.items():
             if isinstance(value, float):
                 logger.info('%-15s: %.4f' % (key, value))
-                # writer.add_scalar(key, value, epoch)
-            # else:
-            #     for k, v in value[0].items():
-                    # writer.add_figure(f'eval_spec/{k}', v, epoch*len(val_dataloader))
+                writer.add_scalar(key, value, epoch)
+            else:
+                for k, v in value[0].items():
+                    writer.add_figure(f'eval_spec/{k}', v, epoch)
         if (epoch % save_freq) == 0:
             trainer.save_checkpoint(osp.join(log_dir, 'epoch_%05d.pth' % epoch))
 
